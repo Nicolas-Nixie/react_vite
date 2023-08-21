@@ -1,6 +1,9 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getPerformance } from "firebase/performance";
+import { getStorage } from "firebase/storage";
 
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyBvE4i-sVNzCGeM9w5NLS4NGsT8O6fkXq0",
@@ -11,12 +14,12 @@ const FIREBASE_CONFIG = {
     appId: "1:518528339148:web:428c38d4c3e3bd69214669"
 }
 
-const firebaseApp = initializeApp(FIREBASE_CONFIG)
+const app = initializeApp(FIREBASE_CONFIG);
+const analytics = getAnalytics(app);
+//type the auth and firestore functions
+const auth = getAuth();
+const firestore = getFirestore(app);
+const performance = getPerformance(app);
+const storage = getStorage(app);
 
-export const auth = getAuth(firebaseApp)
-
-export const getDB = () => {
-    const app = initializeApp(FIREBASE_CONFIG);
-    let db = getFirestore(app);
-    return db;
-}
+export { analytics, auth, firestore, performance, storage };
