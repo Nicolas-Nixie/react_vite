@@ -4,6 +4,8 @@ import { AuthContext } from './context/auth-context'
 import RequireAuth from './components/require-auth'
 import SignIn from './routes/SignIn'
 import Profile from './routes/profile'
+import Loading from './routes/Loading'
+import OrderView from './routes/OrderView'
 
 function App() {
   const { currentUser } = useContext(AuthContext)
@@ -13,18 +15,19 @@ function App() {
   console.log('User:', !!currentUser);
 
   // Check if currentUser exists on initial render
-  useEffect(() => {
-    if (currentUser) {
-      navigate('/profile')
-    }
-  }, [currentUser])
     
   return (
     <Routes>
-      <Route index element={<SignIn />} />
+      <Route index element={<Loading />} />
+      <Route path="signin" element={<SignIn />} />
       <Route path="profile" element={
         <RequireAuth>
           <Profile />
+        </RequireAuth>}
+      />
+      <Route path="OrderView/:orderId" element={
+        <RequireAuth>
+          <OrderView />
         </RequireAuth>}
       />
     </Routes>
