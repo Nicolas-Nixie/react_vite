@@ -8,10 +8,12 @@
     NextOrObserver,
     User
   } from 'firebase/auth';
+  import { getFirestore } from 'firebase/firestore';
   import { getFirebaseConfig } from './firebase-config';
 
   const app = initializeApp(getFirebaseConfig());
   const auth = getAuth(app);
+  export const firestore = getFirestore(app)
 
   export const signInUser = async (
     email: string, 
@@ -27,3 +29,5 @@
   }
 
   export const SignOutUser = async () => await signOut(auth);
+
+  
