@@ -1,51 +1,34 @@
-import './App.css';
-import React, { useState, useEffect } from 'react';
-import { getShoes } from './config/shoes';
+import { useContext, useEffect } from 'react'
+import { Routes , Route, useNavigate } from 'react-router-dom' 
+import { AuthContext } from './context/auth-context'
+import RequireAuth from './components/require-auth'
+import Home from './routes/home'
+import Profile from './routes/profile'
 
-const App = () => {
-  const [loading, setLoading] = useState(false)
-  const [shoes, setshoes] = useState([])
+function App() {
+  const { currentUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const fetchData = async () => {
-    setLoading(true)
+  // NOTE: console log for testing purposes
+  console.log('User:', !!currentUser);
 
-    const res = await getShoes()
-    setshoes([...res])
-    setLoading(false)
-    console.log('response: ', res)
-  }
-  
+  // Check if currentUser exists on initial render
   useEffect(() => {
-    fetchData()
-    .then((response) => response())
-    .then((result) => {
-      setshoes(result);
-      console.log(result);
-    });
-  }, [])
-
-
-  const clickmarque = (id) => {
-
-  }
-
-  
-
-
-  return (
-    <div className="App">
-      <h1 className='m-5'>shoes</h1>
-        
-      {shoes.map(shoe => (
-        <button className='btn m-3' onClick={clickmarque(shoe.id)} >{shoe.nom} cree en {shoe.annee} par {shoe.creator}</button>
-        ))}
-
+    if (currentUser) {
+      navigate('/profile')
+    }
+  }, [currentUser])
     
-        
-        
-    </div>
-  );
+  return (
+    <Routes>
+      <Route index element={<Home />} />
+      <Route path="profile" element={
+        <RequireAuth>
+          <Profile />
+        </RequireAuth>}
+      />
+    </Routes>
+  )
+}
 
-} 
-
-export default App;
+export default App
