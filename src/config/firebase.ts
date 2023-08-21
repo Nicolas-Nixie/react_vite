@@ -6,12 +6,12 @@ import { getPerformance } from "firebase/performance";
 import { getStorage } from "firebase/storage";
 
 const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyBvE4i-sVNzCGeM9w5NLS4NGsT8O6fkXq0",
-    authDomain: "react-27-02-23.firebaseapp.com",
-    projectId: "react-27-02-23",
-    storageBucket: "react-27-02-23.appspot.com",
-    messagingSenderId: "518528339148",
-    appId: "1:518528339148:web:428c38d4c3e3bd69214669"
+    apiKey: "AIzaSyAMGWtetPyubyXaP6-bRT5sqAt6-_wbSgo",
+    authDomain: "apptest-ecbb0.firebaseapp.com",
+    projectId: "apptest-ecbb0",
+    storageBucket: "apptest-ecbb0.appspot.com",
+    messagingSenderId: "270148948509",
+    appId: "1:270148948509:web:ff138880261e28ccb16cf4",
 }
 
 const app = initializeApp(FIREBASE_CONFIG);
