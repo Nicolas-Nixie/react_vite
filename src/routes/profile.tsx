@@ -1,26 +1,19 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { AuthContext } from '../context/auth-context'
 import { firestore, auth } from '../firebase/firebase'
 import { getDocs,getDoc, collection, doc, updateDoc, query, where } from "firebase/firestore";
 import { Link } from 'react-router-dom';
 import Menu from '../components/Menu';
 
 const Profile = () => {
-  //const { currentUser, signOut } = useContext(AuthContext)
-  const [loading, setLoading] = useState(false)
-  //const [shoes, setShoes] = useState([])
-  //const [orderUnits, setOrderUnits] = useState([])
   const [orders, setOrders] = useState<any[]>([])
   const [ordersNb, setOrdersNb] = useState(0)
   const [price30day, setPrice30day] = useState(0)
   const [price60day, setPrice60day] = useState(0)
-  const [priceProgress, setPriceProgress] = useState(0)
 
- const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
 
-    const fetchOrder = async () => {
+    const fetchOrder = async () => {  
       const orders = await findAll()
       setOrders(orders)
     }   
@@ -30,6 +23,7 @@ const Profile = () => {
   }, [])
   
 
+  //calcule la variation de nombres de commande
   const findOrderProgress = async () => {
 
     const order30days = await getOrder30ago()
@@ -39,24 +33,21 @@ const Profile = () => {
      
   }
 
+  //execute les calcule de chiffre d'affaire
   const findPriceProgress = () => {
     findPriceProgress30days()
     findPriceProgress60days()
-    console.log(price30day)
-    console.log(price60day)
-    //setPriceProgress(price30day - price60day)
   }
 
+  // calcule le chiffre d'affaire des 30 derniers jours
   const findPriceProgress30days = async () => {
     const order30days = await getOrder30ago()
     order30days.forEach(async (element: { id: string; }) => {
         const order = await findOrder(element.id)
-        //console.log(order)
         if(order){
             order.shoes.forEach(async (element2: { id: string; }) => {
                 const orderUnit = await findOrderUnit(element2.id)
                 if(orderUnit){
-                    //console.log("orderUnit",orderUnit.shoes.shoeReference)
                     const shoe = await findShoe(orderUnit.shoes.shoeReference.id)
                     if(shoe){
                         const price = shoe.price * orderUnit.shoes.amount
@@ -68,6 +59,7 @@ const Profile = () => {
     });
   }
 
+  // calcule le chiffre d'affaire entre -30 jours et -60 jours
   const findPriceProgress60days = async () => {
     const order60days = await getOrder60ago()
     order60days.forEach(async (element: { id: string; }) => {
@@ -87,21 +79,19 @@ const Profile = () => {
     });
   }
 
-
-
-
-    const getOrder30ago = async () => {
+  //récupérer les commandes des 30 derniers jours
+  const getOrder30ago = async () => {
         var today = new Date();
         var date30ago = new Date(new Date().setDate(today.getDate() - 30));
 
         const f = query(collection(firestore, "order"), where("dateTime", ">=", date30ago))
         const querySnapshot2 = await getDocs(f);
         const result = querySnapshot2.docs
-        //console.log("new : ",result.length)
         return result
-    }
+  }
 
-    const getOrder60ago = async () => {
+  //récupérer les commandes entre -30 jours et -60 jours
+  const getOrder60ago = async () => {
         var today = new Date();
         var date30ago = new Date(new Date().setDate(today.getDate() - 30));
         var date60ago = new Date(new Date().setDate(today.getDate() - 60));
@@ -109,21 +99,22 @@ const Profile = () => {
         const q = query(collection(firestore, "order"), where("dateTime", "<=", date30ago), where("dateTime", ">=", date60ago))
         const querySnapshot = await getDocs(q);
         const result = querySnapshot.docs
-        //console.log("old : ",result.length)
         return result
-    }
+  }
 
-    //charger les données de la collection shoes
+  //charger les données de la collection shoes
   const findShoe = async (id: string) => {
     const doc_ref = await getDoc(doc(firestore, 'shoes', id))
     return doc_ref.data()
   }
 
+  //charger les données de la collection orderUnit
   const findOrderUnit = async (id: string) => {
     const doc_ref = await getDoc(doc(firestore, 'orderUnit', id))
     return doc_ref.data()
   }
 
+  //charger les données de la collection order
   const findOrder = async (id: string) => {
     const doc_ref = await getDoc(doc(firestore, 'order', id))
     return doc_ref.data()
@@ -157,24 +148,24 @@ const Profile = () => {
   }
 
   //valide une commande, change le status de la commande en "valid"
-const validate = async (id: string) => {
+  const validate = async (id: string) => {
     const ordertest = doc(firestore, "order", id);
     await updateDoc(ordertest, {
         status: "valid"
       });
     const orders = await findAll()
     setOrders(orders)
-}
+  }
   //reject une commande, change le status de la commande en "reject"
-const reject = async (id: string) => {
+  const reject = async (id: string) => {
     const ordertest = doc(firestore, "order", id);
     await updateDoc(ordertest, {
         status: "reject"
       });
     const orders = await findAll()
     setOrders(orders)
-}
-  //console.log(orders)
+  }
+
   return(
     
         <div className="antialiased bg-black w-full min-h-screen text-slate-300 relative py-4">

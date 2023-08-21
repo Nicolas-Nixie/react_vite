@@ -1,7 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext} from 'react'
 import { AuthContext } from '../context/auth-context'
-import { firestore, auth } from '../firebase/firebase'
-import { getDocs,getDoc, collection, doc, updateDoc, query, where } from "firebase/firestore";
 import { Link } from 'react-router-dom';
 
 const Menu = () => {
