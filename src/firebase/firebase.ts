@@ -12,7 +12,7 @@
   import { getFirebaseConfig } from './firebase-config';
 
   const app = initializeApp(getFirebaseConfig());
-  const auth = getAuth(app);
+  export const auth = getAuth(app);
   export const firestore = getFirestore(app)
 
   export const signInUser = async (

@@ -3,7 +3,7 @@ import { Routes , Route, useNavigate } from 'react-router-dom'
 import { AuthContext } from './context/auth-context'
 import RequireAuth from './components/require-auth'
 import SignIn from './routes/SignIn'
-import Profile from './routes/profile'
+import Profile from './routes/Profile'
 import Loading from './routes/Loading'
 import OrderView from './routes/OrderView'
 
